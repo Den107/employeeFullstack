@@ -1,6 +1,5 @@
 const {prisma} = require("../prisma/prisma-client");
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+
 
 /**
  * @route GET /api/employees
@@ -34,7 +33,7 @@ const add = async (req, res) => {
         }
 
         const employee = await prisma.employee.create({
-            data:{
+            data: {
                 firstName, lastName, age, adress, userId: req.user.id
             }
         })
@@ -52,7 +51,19 @@ const add = async (req, res) => {
  * @access Private
  */
 const getOne = async (req, res) => {
+    try {
+        const {id} = req.params
+        const employee = await prisma.employee.findUnique({
+            where:{
+                id
+            }
+        })
 
+        res.status(200).json(employee)
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({message: 'Не удалось получить сотрудника'})
+    }
 }
 
 /**
@@ -61,7 +72,18 @@ const getOne = async (req, res) => {
  * @access Private
  */
 const remove = async (req, res) => {
-
+    try {
+        const {id} = req.params
+        await prisma.employee.delete({
+            where: {
+                id
+            }
+        })
+        res.status(204).json({message: 'Ok'})
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({message: 'Не удалось удалить сотрудника'})
+    }
 }
 
 /**
@@ -70,7 +92,22 @@ const remove = async (req, res) => {
  * @access Private
  */
 const edit = async (req, res) => {
+    try{
+        const {id} = req.params
+        const data = req.body
 
+        await prisma.employee.update({
+            where:{
+                id
+            },
+            data
+        })
+
+        res.status(204).json({message:'Ok'})
+    }catch (e) {
+        console.log(e)
+        res.status(500).json({message: 'Не удалось отредактировать сотрудника'})
+    }
 }
 
 module.exports = {
