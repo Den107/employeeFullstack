@@ -24,6 +24,6 @@ model Employee {
   firstName String
   lastName  String
   age       String
-  address    String
+  adress    String
   userId    String
 }
