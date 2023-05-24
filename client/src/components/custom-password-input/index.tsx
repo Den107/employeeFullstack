@@ -24,8 +24,8 @@ const CustomPasswordInput = ({placeholder, name, dependencies}: Props) => {
                     }
                     return Promise.reject(new Error('Пароли должны совпадать'))
                 } else {
-                    if (value.length < 6) {
-                        return Promise.reject(new Error('Пароль должен быть длиннее 6 символов'))
+                    if (value.length < 5) {
+                        return Promise.reject(new Error('Пароль должен быть длиннее 5 символов'))
                     }
                     return Promise.resolve()
                 }
